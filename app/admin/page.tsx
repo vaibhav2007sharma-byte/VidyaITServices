@@ -1,6 +1,5 @@
 // app/admin/page.tsx
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +11,6 @@ export default function AdminLogin() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === "Vidya@Admin2024") {
-      // Store auth in sessionStorage
       sessionStorage.setItem("adminAuth", "true");
       router.push("/admin/dashboard");
     } else {
@@ -29,7 +27,7 @@ export default function AdminLogin() {
           placeholder="Password daalo"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", padding: "0.75rem", marginBottom: "1rem", border: "1px solid #ddd", borderRadius: "8px", fontSize: "1rem", boxSizing: "border-box" }}
+          style={{ width: "100%", padding: "0.75rem", marginBottom: "1rem", border: "1px solid #ddd", borderRadius: "8px", fontSize: "1rem", boxSizing: "border-box" as const }}
         />
         {error && <p style={{ color: "red", marginBottom: "0.5rem", fontSize: "0.9rem" }}>{error}</p>}
         <button type="submit" style={{ width: "100%", padding: "0.75rem", background: "#0070f3", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}>
