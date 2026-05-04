@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Phone, Mail, MapPin, Menu, X, ArrowRight, CheckCircle, Clock, Shield, Zap, Users, Gift, IndianRupee } from "lucide-react";
 
-const PHONE = "+91-9999999999";
+const PHONE = "+91 7878407051";
 const EMAIL = "info@vidyaitservices.com";
-const WHATSAPP = "919999999999";
-const ADDRESS = "251, Pakka Bagh, Anaj Mandi Hapur, Uttar Pradesh";
+const WHATSAPP = "917878407051";
+const ADDRESS = "251, Pakka Bagh, Anaj Mandi Hapur 245101, Uttar Pradesh";
 
 const services = [
   { icon: "🌐", title: "Web Development", desc: "Professional websites & e-commerce solutions", price: "₹8,999", color: "#0056b3" },
@@ -75,9 +75,21 @@ export default function Home() {
     return () => { window.removeEventListener("scroll", onScroll); clearInterval(tTimer); clearInterval(typeTimer); };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const msg = `Hello! New inquiry:\nName: ${formData.name}\nPhone: ${formData.phone}\nService: ${formData.service || 'General'}\nMessage: ${formData.message}`;
+    const msg = `Hello! New inquiry from vidyaitservices.com:\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email || 'N/A'}\nService: ${formData.service || 'General'}\nMessage: ${formData.message}`;
+    // Send email to both addresses
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          emails: ['info@vidyaitservices.com', 'vaibhav2007sharma@gmail.com']
+        })
+      });
+    } catch(err) { console.log('Email send failed', err); }
+    // Also open WhatsApp
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
     setFormSent(true);
   };
