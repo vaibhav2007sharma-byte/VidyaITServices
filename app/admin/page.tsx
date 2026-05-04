@@ -1,66 +1,41 @@
+// app/admin/page.tsx
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      localStorage.setItem("admin_token", data.token);
+    if (password === "Vidya@Admin2024") {
+      // Store auth in sessionStorage
+      sessionStorage.setItem("adminAuth", "true");
       router.push("/admin/dashboard");
     } else {
-      setError("Wrong password! Try again.");
+      setError("Wrong password!");
     }
-    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(135deg,#0056b3,#001f4d)" }}>
-      <div className="bg-white rounded-3xl p-10 w-full max-w-md shadow-2xl">
-        <div className="text-center mb-8">
-          <Image src="/logo.png" alt="Vidya IT" width={160} height={54} className="h-12 w-auto object-contain mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900">Admin Login</h1>
-          <p className="text-gray-500 text-sm mt-1">Vidya IT Services Control Panel</p>
-        </div>
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 text-red-600 text-sm text-center">{error}</div>
-        )}
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Admin Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Enter admin password"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-xl text-white font-bold text-base transition-all hover:opacity-90"
-            style={{ background: "#0056b3" }}
-          >
-            {loading ? "Logging in..." : "🔐 Login to Admin Panel"}
-          </button>
-        </form>
-      </div>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#f0f2f5" }}>
+      <form onSubmit={handleLogin} style={{ background: "white", padding: "2rem", borderRadius: "12px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)", width: "320px" }}>
+        <h2 style={{ marginBottom: "1.5rem", textAlign: "center", color: "#1a1a2e" }}>🔐 Admin Login</h2>
+        <input
+          type="password"
+          placeholder="Password daalo"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", padding: "0.75rem", marginBottom: "1rem", border: "1px solid #ddd", borderRadius: "8px", fontSize: "1rem", boxSizing: "border-box" }}
+        />
+        {error && <p style={{ color: "red", marginBottom: "0.5rem", fontSize: "0.9rem" }}>{error}</p>}
+        <button type="submit" style={{ width: "100%", padding: "0.75rem", background: "#0070f3", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", cursor: "pointer" }}>
+          Login
+        </button>
+      </form>
     </div>
   );
 }
